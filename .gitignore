@@ -49,3 +49,7 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Supabase local
+supabase/.branches/
+supabase/.temp/
