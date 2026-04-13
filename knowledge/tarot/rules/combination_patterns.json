@@ -1,0 +1,72 @@
+{
+  "dominanceRules": [
+    {
+      "condition": "메이저 아르카나 3장 이상",
+      "conditionEn": "3+ Major Arcana cards",
+      "meaning": "인생의 큰 전환점에 서 있다. 운명적 힘이 작용하며, 개인의 의지보다 큰 흐름이 삶을 이끈다. 중요한 결정이 장기적 영향을 미친다."
+    },
+    {
+      "condition": "같은 슈트 3장 이상",
+      "conditionEn": "3+ cards of same suit",
+      "meaning": "해당 원소의 영역에 에너지가 집중되어 있다. Wands=행동/열정 편중, Cups=감정/관계 편중, Swords=생각/갈등 편중, Pentacles=물질/현실 편중."
+    },
+    {
+      "condition": "같은 숫자 2장 이상",
+      "conditionEn": "2+ cards with same number",
+      "meaning": "해당 숫자의 테마가 강조된다. 우연이 아닌 메시지. 번호의 의미를 깊이 살펴야 한다."
+    },
+    {
+      "condition": "역방향 카드 과반수",
+      "conditionEn": "Majority reversed cards",
+      "meaning": "에너지가 내면으로 향하고 있다. 외부 행동보다 내면 작업(성찰, 치유, 해소)이 필요한 시기. 차단된 에너지를 풀어야 전진할 수 있다."
+    },
+    {
+      "condition": "코트카드(Page/Knight/Queen/King) 다수",
+      "conditionEn": "Multiple court cards",
+      "meaning": "주변 사람들의 영향이 큰 상황이다. 관계 역학이 핵심이며, 누가 어떤 역할을 하는지 파악해야 한다."
+    },
+    {
+      "condition": "Ace 2장 이상",
+      "conditionEn": "2+ Aces",
+      "meaning": "강력한 새 시작의 에너지. 여러 영역에서 동시에 새로운 기회가 열린다. 씨앗을 뿌리는 시기."
+    },
+    {
+      "condition": "10번 카드 2장 이상",
+      "conditionEn": "2+ Tens",
+      "meaning": "순환이 완성되는 시기. 여러 일이 동시에 마무리되며, 다음 단계로의 전환이 임박했다."
+    }
+  ],
+  "powerfulPairs": [
+    { "cards": ["The Tower", "The Star"], "meaning": "파괴 후 희망. 가장 어두운 밤 뒤에 별빛이 온다. 위기를 겪은 후 치유와 재건이 시작된다." },
+    { "cards": ["Death", "The Sun"], "meaning": "변환을 통한 기쁨. 무언가의 끝이 밝은 새 시작을 가져온다. 두려워하던 변화가 축복이 된다." },
+    { "cards": ["The Moon", "The Sun"], "meaning": "혼란에서 진실로. 불안과 환상이 걷히고 상황이 명확해진다. 숨겨진 것이 빛 아래 드러난다." },
+    { "cards": ["The Lovers", "The Devil"], "meaning": "사랑과 집착의 경계. 건강한 유대인지 중독적 관계인지 구분이 필요하다. 자유로운 선택 vs 얽매임." },
+    { "cards": ["The Empress", "The Emperor"], "meaning": "여성성+남성성의 완벽한 균형. 창조와 구조, 돌봄과 보호가 조화를 이룬다. 이상적 파트너십." },
+    { "cards": ["The High Priestess", "The Magician"], "meaning": "직관+행동의 조합. 내면의 지혜를 현실에서 실현하는 힘. 알고 있는 것을 행동으로 옮겨라." },
+    { "cards": ["Wheel of Fortune", "Death"], "meaning": "불가피한 변화의 물결. 저항해도 소용없다. 흐름을 받아들이면 오히려 유리해진다." },
+    { "cards": ["The Hermit", "The Star"], "meaning": "고독 속에서 발견한 빛. 혼자만의 시간이 영적 성장과 치유를 가져온다." },
+    { "cards": ["The Chariot", "Strength"], "meaning": "외적 의지+내적 힘. 목표를 향한 추진력과 인내심이 모두 갖춰졌다. 반드시 해낸다." },
+    { "cards": ["The Fool", "The World"], "meaning": "완성과 동시에 새 시작. 하나의 여정이 끝나면서 더 큰 모험이 시작된다. 영원한 순환." },
+    { "cards": ["The Devil", "The Tower"], "meaning": "억압에서의 갑작스러운 해방. 중독이나 나쁜 패턴이 충격적으로 깨진다. 고통스럽지만 필요한 각성." },
+    { "cards": ["Justice", "Judgement"], "meaning": "카르마의 결산. 과거 행동의 결과가 명확하게 나타난다. 공정한 심판과 영적 각성." },
+    { "cards": ["Temperance", "The Star"], "meaning": "깊은 치유의 시기. 인내와 균형이 희망과 영감을 가져온다. 천천히 but 확실히 나아지고 있다." },
+    { "cards": ["Three of Swords", "The Star"], "meaning": "상처 후 치유. 마음의 고통이 지나가고 희망이 돌아온다." },
+    { "cards": ["Ten of Swords", "The Sun"], "meaning": "최악의 바닥을 찍고 반등. 더 이상 나빠질 수 없으니, 이제부터 좋아진다." },
+    { "cards": ["Two of Cups", "The Lovers"], "meaning": "깊고 운명적인 연결. 진정한 소울메이트 에너지. 상호적이고 의미 있는 만남." },
+    { "cards": ["Ace of Pentacles", "Ten of Pentacles"], "meaning": "물질적 풍요의 여정. 작은 시작이 큰 번영으로 이어진다." },
+    { "cards": ["The Hanged Man", "Death"], "meaning": "멈춤 후 변화. 자발적 기다림이 강제적 전환으로 이어지거나, 포기해야 할 것을 놓아야 변화가 온다." }
+  ],
+  "numberMeanings": {
+    "0": "무한한 가능성, 시작 전의 순수한 상태",
+    "1": "새로운 시작, 순수한 잠재력, 씨앗",
+    "2": "균형, 이원성, 선택의 기로, 파트너십",
+    "3": "창조, 성장, 확장, 풍요, 협력",
+    "4": "안정, 구조, 기반, 질서, 때로는 정체",
+    "5": "변화, 갈등, 불안정, 도전, 성장통",
+    "6": "조화, 치유, 균형 회복, 나눔, 향수",
+    "7": "성찰, 내면 탐구, 신앙의 시험, 평가",
+    "8": "힘, 숙달, 빠른 움직임, 성취",
+    "9": "완성 직전, 최고조, 지혜의 축적",
+    "10": "완성, 순환의 끝, 새 시작의 문턱, 과잉"
+  }
+}

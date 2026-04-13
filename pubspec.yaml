@@ -1,0 +1,70 @@
+name: taro_a2ui
+description: "A2UI Tarot Reading App - AI generates interactive tarot card UI"
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.11.3
+
+dependencies:
+  flutter:
+    sdk: flutter
+  genui: ^0.7.0
+  dartantic_ai: ^3.2.0
+  json_schema_builder: ^0.1.3
+  logging: ^1.3.0
+  hive_flutter: ^1.1.0
+  easy_localization: ^3.0.7+1
+  go_router: ^14.0.0
+  http: ^1.2.0
+  flutter_riverpod: ^2.6.0
+  riverpod_annotation: ^2.6.0
+  supabase_flutter: ^2.8.0
+  flutter_tts: ^4.2.0
+  just_audio: ^0.9.40
+  path_provider: ^2.1.0
+  web_socket_channel: ^3.0.1
+  speech_to_text: ^7.0.0
+  cached_network_image: ^3.4.1
+  purchases_flutter: ^8.0.0
+  talker_flutter: ^4.7.0
+  talker_riverpod_logger: ^4.7.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  riverpod_generator: ^2.6.0
+  build_runner: ^2.4.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/tarot_data.json
+    - assets/cards/
+    - assets/prompts/
+    - lib/i18n/ko/
+    - lib/i18n/en/
+    - lib/i18n/ja/
+    - lib/i18n/zh/
+    - lib/i18n/vi/
+    - lib/i18n/th/
+    - lib/i18n/id/
+    - lib/i18n/ms/
+    - lib/i18n/my/
+    - lib/i18n/fr/
+    - lib/i18n/de/
+    - lib/i18n/es/
+    - lib/i18n/pt/
+    - lib/i18n/it/
+    - lib/i18n/hi/
+    - lib/i18n/ar/
+    - lib/i18n/ru/
+
+  fonts:
+    - family: NotoSerifKR
+      fonts:
+        - asset: assets/fonts/NotoSerifKR-Light.otf
+          weight: 300
+        - asset: assets/fonts/NotoSerifKR-Regular.otf
+          weight: 400

@@ -1,0 +1,84 @@
+{
+  "suitElements": {
+    "wands": "Fire",
+    "cups": "Water",
+    "swords": "Air",
+    "pentacles": "Earth"
+  },
+  "majorElements": {
+    "The Fool": "Air",
+    "The Magician": "Air",
+    "The High Priestess": "Water",
+    "The Empress": "Earth",
+    "The Emperor": "Fire",
+    "The Hierophant": "Earth",
+    "The Lovers": "Air",
+    "The Chariot": "Water",
+    "Strength": "Fire",
+    "The Hermit": "Earth",
+    "Wheel of Fortune": "Fire",
+    "Justice": "Air",
+    "The Hanged Man": "Water",
+    "Death": "Water",
+    "Temperance": "Fire",
+    "The Devil": "Earth",
+    "The Tower": "Fire",
+    "The Star": "Air",
+    "The Moon": "Water",
+    "The Sun": "Fire",
+    "Judgement": "Fire",
+    "The World": "Earth"
+  },
+  "interactions": {
+    "Fire+Fire": {
+      "type": "strengthen",
+      "ko": "극강화 — 열정 폭발",
+      "effect": "에너지가 두 배로 강해진다. 행동력과 열정이 넘치지만, 과열·충동·소진에 주의. 불꽃이 너무 크면 스스로를 태운다."
+    },
+    "Water+Water": {
+      "type": "strengthen",
+      "ko": "감정 심화",
+      "effect": "감정이 매우 깊고 강렬해진다. 직관과 공감 능력이 극대화되지만, 감상적이 되거나 현실 감각을 잃을 수 있다."
+    },
+    "Air+Air": {
+      "type": "strengthen",
+      "ko": "사고 과잉",
+      "effect": "지적 활동이 극대화된다. 분석력과 소통이 뛰어나지만, 생각만 많고 행동이 부족하거나 불안·과잉분석에 빠질 수 있다."
+    },
+    "Earth+Earth": {
+      "type": "strengthen",
+      "ko": "견고한 안정",
+      "effect": "매우 안정적이고 실질적이다. 물질적 기반이 탄탄하지만, 변화를 거부하고 고집스러워질 수 있다. 정체 주의."
+    },
+    "Fire+Air": {
+      "type": "friendly",
+      "ko": "시너지 — 열정+지성",
+      "effect": "바람이 불을 키우듯, 아이디어가 행동으로 옮겨진다. 소통이 열정을 가속화한다. 창조적 에너지의 조합."
+    },
+    "Fire+Earth": {
+      "type": "friendly",
+      "ko": "실질적 성장",
+      "effect": "열정에 현실적 기반이 더해진다. 꿈을 구체적 결과로 만들 수 있는 조합. 행동+실행의 시너지."
+    },
+    "Water+Air": {
+      "type": "friendly",
+      "ko": "감성+이성의 균형",
+      "effect": "감정을 이성적으로 정리할 수 있다. 직관과 논리가 함께 작용하여 균형 잡힌 판단을 내린다."
+    },
+    "Water+Earth": {
+      "type": "friendly",
+      "ko": "양육과 성장",
+      "effect": "물이 땅을 적시듯, 감정이 현실에 뿌리를 내린다. 관계와 물질적 안정이 함께 성장한다. 가정·돌봄의 에너지."
+    },
+    "Fire+Water": {
+      "type": "enemy",
+      "ko": "충돌 — 열정 vs 감정",
+      "effect": "서로를 약화시킨다. 행동하고 싶지만 감정이 발목을 잡거나, 감정에 충실하고 싶지만 충동이 앞선다. 내면 갈등."
+    },
+    "Air+Earth": {
+      "type": "enemy",
+      "ko": "충돌 — 이론 vs 현실",
+      "effect": "서로를 약화시킨다. 생각과 현실 사이의 괴리. 계획은 완벽하지만 실행이 안 되거나, 현실에 매몰되어 새로운 시각을 잃는다."
+    }
+  }
+}

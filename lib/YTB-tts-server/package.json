@@ -1,0 +1,24 @@
+{
+  "name": "tts-server",
+  "version": "1.0.0",
+  "description": "Standalone TTS server — ElevenLabs + Google Cloud TTS Pro",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "node --watch -r ts-node/register src/index.ts"
+  },
+  "dependencies": {
+    "@elevenlabs/elevenlabs-js": "^1.0.0",
+    "@google-cloud/text-to-speech": "^5.0.0",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.0",
+    "pino": "^9.6.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.14.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}
