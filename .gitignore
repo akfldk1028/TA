@@ -1,5 +1,8 @@
-# API keys
+# API keys / release signing — NEVER commit
 env.json
+android/key.properties
+android/app/*.jks
+android/app/*.keystore
 
 # Recursive clone artifacts
 /clone/
