@@ -77,8 +77,7 @@ TarotSession._sendToAi()
            → Qwen tool_call: get_combination_rules("elemental_dignities") → DB 조회
            → 최종 텍스트 답변 확보
         2. SSE 스트리밍 반환 (50자 청크)
-      → [실패 시] retry 1회
-      → [재실패 시] GeminiAiClient fallback
+      → [실패 시] retry 1회 (동일 primary 재호출)
     → JSON 파싱: A2UI 블록 증분 emit
     → DrawCards/ReadingSummary 컴포넌트 필터링
 ```
@@ -93,10 +92,10 @@ TarotSession._sendToAi()
 | State | Riverpod (ChangeNotifierProvider.autoDispose) |
 | Routing | go_router |
 | i18n | easy_localization (17개 언어) |
-| TTS | flutter_tts(local) + ElevenLabs(remote) + Gemini Live(live) |
+| TTS | flutter_tts(local) + Fish Audio S2(remote) + Gemini Live(live) |
 | IAP | purchases_flutter (RevenueCat) — placeholder 키, 아직 미연동 |
 | Image | CachedNetworkImage (Supabase Storage) |
-| Logging | talker_flutter + TalkerRiverpodObserver |
+| Logging | talker_flutter + TalkerRiverpodObserver + TalkerSupabaseObserver (error_logs RPC) |
 
 ---
 
@@ -106,12 +105,12 @@ TarotSession._sendToAi()
 - **UI 배치는 수학적 계산** — 하드코딩 금지. 경계 조건 → 역산 공식 사용. 예: `maxRadius = (availW / 2 - cardW) / sin(totalAngle / 2)`
 - **DrawCards 컴포넌트 UI 미표시** — AI가 생성해도 채팅에 안 보여줌. transport.dart에서 콜백만 처리. 카드+해석만 표시.
 - **Phase 전환은 `_setPhase()` 경유** — 직접 `_phase =` 할당 금지. `_validTransitions` 맵 참조.
-- **AI 호출은 `RetryAiClient` 경유** — retry 1회 → GeminiAiClient fallback. 스트리밍 보존 (`yield*`).
+- **AI 호출은 `RetryAiClient` 경유** — primary 1회 retry. Gemini fallback 제거됨(Phase 2 대기). 스트리밍 보존 (`yield*`).
 
 ### TTS 규칙
 - **StreamAudioSource 쓰지 마라** — Android ExoPlayer `Source error`. 임시파일(`writeAsBytes → setFilePath → play`) 방식만 사용.
 - **JSON 키 `audioBase64`** — `audio` 아님. Edge Function 응답 키 불일치 주의.
-- **`similarity_boost` snake_case로 보내라** — Edge Function은 snake_case 읽음, camelCase 아님.
+- **Fish Audio `reference_id`는 Secret 주입** — 코드에 voice ID 하드코딩 금지. `FISH_AUDIO_VOICE_*` env 경유.
 
 ### Gemini Live API 규칙
 - **WebSocket 응답 `Uint8List`** — `utf8.decode(raw)` 필수. `raw as String` 캐스팅 절대 금지.
@@ -128,30 +127,38 @@ TarotSession._sendToAi()
 
 ## Supabase Backend
 
+폴더 구조와 마이그레이션 규칙은 `supabase/README.md` 참조.
+
 ### Edge Functions (supabase/functions/)
 
-| Function | Version | 역할 |
-|----------|---------|------|
-| `ai-tarot` | v4 (ver 11) | Qwen 3.5 Flash + FC preflight tool calling + SSE streaming |
-| `tts` | v6 | ElevenLabs TTS (7 voices, multilingual v2) |
-| `seed-knowledge` | v1 | 78장+4규칙 DB 삽입 유틸 (일회용) |
+| Function | 역할 |
+|----------|------|
+| `ai-tarot` | Qwen 3.5 Flash + FC preflight tool calling + SSE streaming |
+| `tts` | Fish Audio S2 (reference_id env-driven, MP3 base64 반환) |
+| `seed-knowledge` | 78장+4규칙 DB 삽입 유틸 (일회용) |
 
-### DB Tables (supabase/schema.sql)
+### DB Tables (supabase/schema/tables/)
 
 | Table | 용도 |
 |-------|------|
 | `tarot_cards` | 78장 카드 지식 (data JSONB, name으로 조회) |
 | `tarot_rules` | 4개 조합 규칙 (slug PK) |
 | `tarot_readings` | 리딩 세션 (RLS: user_id) |
+| `tarot_messages` | 리딩 중 대화 (role/content, reading_id FK) |
 | `tarot_daily_usage` | 일일 토큰/비용 (UNIQUE user_id+date) |
 | `subscriptions` | IAP 구독 (UNIQUE user_id+product_id) |
+| `user_profiles` | 앱 사용자 프로필 (auth.users 트리거 자동 생성) |
+| `error_logs` | 앱 오류 원격 추적 (log_app_error RPC 로만 INSERT) |
 
 ### RPC
 - `increment_tarot_usage(p_user_id, p_reading_count, p_token_count, p_gemini_cost)` — UPSERT 패턴
+- `log_app_error(p_severity, p_tag, p_message, p_stack?, p_context?, p_app_version?, p_platform?)` — SECURITY DEFINER. 클라이언트는 `TalkerSupabaseObserver` 경유 호출.
 
 ### Secrets (Dashboard > Settings > Edge Functions)
-- `QWEN_API_KEY` — DashScope API 키
-- `ELEVENLABS_API_KEY` — ElevenLabs API 키
+- `QWEN_API_KEY` — DashScope Qwen 3.5 Flash
+- `FISH_AUDIO_API_KEY` — Fish Audio S2
+- `FISH_AUDIO_VOICE_MATILDA` / `_RIVER` / `_SHIMMER` / `_ADAM` — 페르소나별 reference_id
+- (legacy) `ELEVENLABS_API_KEY` — 롤백 대비 유지, 삭제 금지
 
 ### Storage
 - `tarot-cards` 버킷 (public) — 78장 PNG. URL: `{storageBase}/{suit}_{rank:02d}.png`
@@ -166,10 +173,12 @@ lib/
 ├── core/
 │   ├── config/ai_config.dart     — API 키, defaultModel: qwen3.5-flash
 │   ├── services/supabase_service.dart — Supabase 초기화, 익명 인증, DB 저장
+│   ├── observability/
+│   │   └── talker_supabase_observer.dart — Talker → error_logs RPC (throttled, fail-silent)
 │   └── tts/                      — 3모드 TTS
 │       ├── tts_service.dart      — setVoice, speak, startLiveSession, 모드 전환
 │       ├── tts_config.dart       — 17개 locale 속도/피치
-│       ├── providers/            — local(flutter_tts), remote(Supabase→ElevenLabs)
+│       ├── providers/            — local(flutter_tts), remote(Supabase→Fish Audio)
 │       ├── remote/               — TtsRemoteClient, TtsAudioPlayer(임시파일!)
 │       └── live/                 — Gemini Live WebSocket
 ├── models/
@@ -197,7 +206,10 @@ lib/
 knowledge/tarot/                  — 78장 카드 + 4규칙 JSON (AI 지식 DB 소스)
 assets/cards/generated/           — 78장 카와이 동물 카드 이미지
 supabase/functions/               — Edge Function 소스 (ai-tarot, tts, seed-knowledge)
-supabase/schema.sql               — DB 스키마 (5테이블 + RLS + RPC)
+supabase/migrations/              — 버전 마이그레이션 (NNNN_*.sql, append-only)
+supabase/schema/                  — 리소스별 현재 정의 (tables/, rpc/, triggers/, policies/)
+supabase/queries/                 — 대시보드/분석 쿼리
+supabase/schema.sql               — [DEPRECATED] legacy 스냅샷 (수정 금지)
 ```
 
 ---
@@ -213,34 +225,37 @@ supabase/schema.sql               — DB 스키마 (5테이블 + RLS + RPC)
 | `[Purchase]` | purchase_service.dart | 초기화, 구매 완료/실패, entitlement 판정 |
 | `[Usage]` | usage_provider.dart | 오늘 사용량/남은 횟수, 프리미엄 무제한 |
 | `[Gate]` | purchase_gate.dart | 허용/차단 판정 (remaining 값) |
+| `[FlutterError]` / `[PlatformDispatcher]` / `[ZoneUncaught]` | main.dart | 전역 에러 핸들러 — TalkerSupabaseObserver 경유 error_logs 로 전송 |
 
 ---
 
 ## Persona & Voice 매핑
 
-| 페르소나 | voiceId | 성별 | ElevenLabs ID |
-|---------|---------|------|---------------|
-| 신비 현자 | matilda | 여성 | XrExE9yKIg1WjnnlVkGX |
-| 분석가 | river | 중성 | SAz9YHcvj6GT2YYXdXww |
-| 친구 | shimmer | 여성 | N2lVS1w4EtoT3dr4eOWO |
-| 직설가 | adam | 남성 | pNInz6obpgDQGcFmaJgB |
+voice reference_id 는 **Supabase Secret 주입** (`FISH_AUDIO_VOICE_*`). 코드에 하드코딩 금지.
+
+| 페르소나 | voiceId preset | 성별 | Secret env |
+|---------|---------|------|-----------|
+| 신비 현자 | matilda | 여성 | FISH_AUDIO_VOICE_MATILDA |
+| 분석가 | river | 중성 | FISH_AUDIO_VOICE_RIVER |
+| 친구 | shimmer | 여성 | FISH_AUDIO_VOICE_SHIMMER |
+| 직설가 | adam | 남성 | FISH_AUDIO_VOICE_ADAM |
 
 ---
 
 ## 알려진 미해결 이슈
 
 - **에뮬레이터 STT timeout** — 호스트 마이크 OFF가 기본. `emulator -avd <name> -allow-host-audio` 또는 `adb emu avd hostmicon`
-- **Live 양방향 음성 미구현** — WebSocket 연결 성공, 텍스트 전송 가능. 마이크 PCM → WebSocket 직접 전송은 `record` 패키지 필요.
+- **Live 양방향 음성 미구현** — WebSocket 연결 성공, 텍스트 전송 가능. 마이크 PCM → WebSocket 직접 전송은 `record` 패키지 필요 (Phase 2).
 - **RevenueCat 미연동** — placeholder 키 (`xxx` prefix → IAP 비활성화)
-- **applicationId** — `com.example.taro_a2ui` (아직 기본값, 앱 스토어 제출 전 변경 필요)
+- **Release keystore 미생성** — `android/key.properties` + `upload-keystore.jks` 생성 필요. 없으면 `build.gradle.kts` 가 debug 서명으로 폴백.
 
 ---
 
 ## 남은 작업
 
-1. QWEN_API_KEY Supabase Secret 확인
-2. 실기기 STT/TTS 테스트
-3. RevenueCat 대시보드 앱 생성 → API 키
-4. `dart run build_runner build` (codegen)
-5. 앱 아이콘/스플래시 적용, applicationId 변경
-6. Android/iOS 빌드 → 스토어 제출
+1. `FISH_AUDIO_API_KEY` + 4 voice reference_id Supabase Secret 주입 (Dashboard > Edge Functions > Secrets)
+2. 실기기 STT/TTS 테스트 + Fish Audio 한국어 청음 품질 확인
+3. RevenueCat 대시보드 앱 생성 → API 키 → placeholder 교체
+4. `dart run build_runner build` (purchase_provider.g.dart 등 codegen)
+5. Release keystore 생성 (`keytool -genkey -keystore android/app/upload-keystore.jks ...`) + `android/key.properties` 작성
+6. Android 앱 번들 / iOS archive → 스토어 제출
