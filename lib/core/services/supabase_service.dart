@@ -83,4 +83,31 @@ class SupabaseService {
       _log.warning('Failed to save reading: $e');
     }
   }
+
+  /// Send an error log to Supabase via `log_app_error` RPC.
+  /// Fail-silent: network/RLS failures never propagate to the caller.
+  Future<void> logError({
+    required String severity,
+    required String tag,
+    required String message,
+    String? stack,
+    Map<String, dynamic>? context,
+    String? appVersion,
+    String? platform,
+  }) async {
+    if (!_initialized) return;
+    try {
+      await client.rpc('log_app_error', params: {
+        'p_severity': severity,
+        'p_tag': tag,
+        'p_message': message,
+        'p_stack': stack,
+        'p_context': context,
+        'p_app_version': appVersion,
+        'p_platform': platform,
+      });
+    } catch (e) {
+      _log.warning('logError RPC failed: $e');
+    }
+  }
 }
