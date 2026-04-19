@@ -36,6 +36,26 @@ dev_dependencies:
   flutter_lints: ^6.0.0
   riverpod_generator: ^2.6.0
   build_runner: ^2.4.0
+  flutter_native_splash: ^2.4.1
+  flutter_launcher_icons: ^0.14.1
+
+flutter_native_splash:
+  color: "#FFFFFF"
+  image: assets/logo/oracle_logo_transparent.png
+  android_12:
+    image: assets/logo/oracle_logo_transparent.png
+    color: "#FFFFFF"
+  android: true
+  ios: true
+  web: false
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/logo/icon_1024.png"
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: "assets/logo/ic_launcher_foreground.png"
+  remove_alpha_ios: true
 
 flutter:
   uses-material-design: true
@@ -43,6 +63,7 @@ flutter:
     - assets/tarot_data.json
     - assets/cards/
     - assets/prompts/
+    - assets/logo/
     - lib/i18n/ko/
     - lib/i18n/en/
     - lib/i18n/ja/

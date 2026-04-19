@@ -140,13 +140,13 @@ class PurchaseNotifier extends _$PurchaseNotifier {
     state = const AsyncLoading();
     try {
       final result = await Purchases.purchasePackage(package);
-      state = AsyncData(result.customerInfo);
-      await PurchaseMutations.recordPurchase(result.customerInfo);
+      state = AsyncData(result);
+      await PurchaseMutations.recordPurchase(result);
       final (premium, reason) = _checkPremium();
       talker.info('[Purchase] 구매 완료: ${package.storeProduct.identifier} → isPremium=$premium ($reason)');
 
       // entitlement 미반영 시 재시도
-      if (result.customerInfo.entitlements.all[PurchaseConfig.entitlementPremium]?.isActive != true) {
+      if (result.entitlements.all[PurchaseConfig.entitlementPremium]?.isActive != true) {
         for (int i = 1; i <= 3; i++) {
           await Future.delayed(Duration(seconds: i));
           final latest = await Purchases.getCustomerInfo();
