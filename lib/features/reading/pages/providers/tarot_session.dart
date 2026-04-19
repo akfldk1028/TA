@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:genui/genui.dart';
 
-import '../../../../core/config/ai_config.dart';
 import '../../../../core/services/cache_service.dart';
 import '../../../../core/services/supabase_service.dart';
 import '../../../../core/tts/tts_service.dart';
@@ -29,12 +28,7 @@ final tarotSessionProvider =
 class TarotSession extends ChangeNotifier {
   TarotSession({AiClient? aiClient}) {
     _client = aiClient ??
-        (AiConfig.useEdgeFunction
-            ? RetryAiClient(
-                primary: EdgeFunctionAiClient(),
-                fallback: GeminiAiClient(),
-              )
-            : GeminiAiClient());
+        RetryAiClient(primary: EdgeFunctionAiClient());
   }
 
   late final AiClient _client;
