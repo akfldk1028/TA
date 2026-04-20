@@ -84,6 +84,24 @@ class SupabaseService {
     }
   }
 
+  /// Increment today's reading count for the current user by 1.
+  /// Called when a spread completes — this is the monetization gate counter.
+  /// Free users are limited to [PurchaseConfig.freeDailyReadings] spreads per day.
+  Future<void> incrementReadingCount() async {
+    if (!_initialized || userId == null) return;
+    try {
+      await client.rpc('increment_tarot_usage', params: {
+        'p_user_id': userId,
+        'p_reading_count': 1,
+        'p_token_count': 0,
+        'p_gemini_cost': 0,
+      });
+      _log.info('Reading count incremented');
+    } catch (e) {
+      _log.warning('Failed to increment reading count: $e');
+    }
+  }
+
   /// Send an error log to Supabase via `log_app_error` RPC.
   /// Fail-silent: network/RLS failures never propagate to the caller.
   Future<void> logError({

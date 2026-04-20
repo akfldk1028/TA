@@ -28,13 +28,23 @@ class TtsRemoteClient {
       };
 
   /// Sync TTS 생성. Provider 실패 시 서버가 자동 fallback.
+  /// 30초 타임아웃 — Fish Audio가 장문에서 20s+ 걸릴 수 있어 여유 있게.
+  /// 타임아웃 시 TtsRemoteException throw → speak() 가 catch 해서 isSpeaking 리셋.
   Future<TTSResponse> generate(TTSRequest request) async {
     final uri = Uri.parse('$baseUrl/api/generate');
-    final response = await _http.post(
-      uri,
-      headers: _headers,
-      body: jsonEncode(request.toJson()),
-    );
+    final response = await _http
+        .post(
+          uri,
+          headers: _headers,
+          body: jsonEncode(request.toJson()),
+        )
+        .timeout(
+          const Duration(seconds: 30),
+          onTimeout: () => throw TtsRemoteException(
+            'TTS generate timed out after 30s',
+            statusCode: 0,
+          ),
+        );
 
     if (response.statusCode != 200) {
       throw TtsRemoteException(

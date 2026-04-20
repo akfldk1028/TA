@@ -314,6 +314,12 @@ class TarotSession extends ChangeNotifier {
       spreadType: _currentSpread?.name,
       locale: _locale,
     );
+
+    // Monetization gate: 1 completed spread = +1 daily count.
+    // PurchaseGate reads tarot_daily_usage.reading_count; free users capped
+    // at PurchaseConfig.freeDailyReadings/day. Premium users bypass the gate
+    // upstream (dailyUsageProvider returns null for premium).
+    SupabaseService.instance.incrementReadingCount();
   }
 
   /// Follow-up message from user.
