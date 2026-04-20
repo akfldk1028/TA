@@ -1,8 +1,6 @@
 import 'dart:async';
-import 'dart:ui';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -33,15 +31,12 @@ void main() {
   runZonedGuarded<Future<void>>(() async {
     WidgetsFlutterBinding.ensureInitialized();
 
-    // Route framework + platform errors through talker so the Supabase
-    // observer can forward them to error_logs.
+    // Route framework errors through talker. Async errors are caught by
+    // runZonedGuarded below — no separate PlatformDispatcher.onError to avoid
+    // duplicate rows in error_logs for the same async error.
     FlutterError.onError = (details) {
       FlutterError.presentError(details);
       talker.handle(details.exception, details.stack, 'FlutterError');
-    };
-    PlatformDispatcher.instance.onError = (error, stack) {
-      talker.handle(error, stack, 'PlatformDispatcher');
-      return true;
     };
 
     await Hive.initFlutter();
