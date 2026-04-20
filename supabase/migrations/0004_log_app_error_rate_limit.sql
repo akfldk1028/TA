@@ -1,6 +1,11 @@
--- 클라이언트에서 호출하는 단일 에러 로깅 진입점.
--- SECURITY DEFINER 로 RLS 우회 INSERT. auth.uid() 로 user_id 자동 채움 (anon 은 NULL).
--- Rate limit: authenticated 30/min per user, anon 60/min global (over-limit 은 NULL 반환).
+-- Add server-side rate limit to log_app_error RPC.
+-- Client-side throttle in TalkerSupabaseObserver (20/min) is insufficient —
+-- anon key is bundled in the APK, so a leaked key could flood error_logs.
+--
+-- Limits:
+--   authenticated user: 30 rows/min per auth.uid()
+--   anon:               60 rows/min globally (shared bucket)
+-- Over-limit calls RETURN NULL silently (no exception — keeps fail-silent client contract).
 
 CREATE OR REPLACE FUNCTION log_app_error(
   p_severity TEXT,
@@ -55,5 +60,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
 
--- anon 과 authenticated 에 실행 권한 부여 (RLS 는 INSERT 전에 함수 레벨에서 통과).
-GRANT EXECUTE ON FUNCTION log_app_error(TEXT, TEXT, TEXT, TEXT, JSONB, TEXT, TEXT) TO anon, authenticated;
+-- Supporting index for the COUNT() scans (partial where created_at recent).
+CREATE INDEX IF NOT EXISTS idx_error_logs_user_created
+  ON error_logs (user_id, created_at DESC);

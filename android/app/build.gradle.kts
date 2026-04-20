@@ -50,12 +50,15 @@ android {
 
     buildTypes {
         release {
-            // key.properties 존재 시 release 서명, 없으면 debug 로 폴백 (로컬 빌드 가능).
-            signingConfig = if (rootProject.file("key.properties").exists()) {
-                signingConfigs.getByName("release")
-            } else {
-                signingConfigs.getByName("debug")
+            // Release 빌드는 반드시 release 서명 — key.properties 없으면 fail-loud.
+            // 로컬 테스트는 `flutter build apk --debug` 또는 `flutter run` 사용.
+            if (!rootProject.file("key.properties").exists()) {
+                throw GradleException(
+                    "Release build requires android/key.properties. " +
+                    "See .claude/memory/taro/production/oracle_identity.md for keystore setup."
+                )
             }
+            signingConfig = signingConfigs.getByName("release")
         }
     }
 }
