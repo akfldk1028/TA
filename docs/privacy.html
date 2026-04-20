@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>오라클 (Oracle) 개인정보처리방침</title>
+<style>
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; max-width: 760px; margin: 40px auto; padding: 0 20px; line-height: 1.7; color: #222; }
+h1 { font-size: 1.8rem; border-bottom: 2px solid #333; padding-bottom: 8px; }
+h2 { font-size: 1.2rem; margin-top: 2rem; color: #333; }
+code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; }
+.meta { color: #666; font-size: 0.9rem; }
+ul { padding-left: 20px; }
+</style>
+</head>
+<body>
+<h1>오라클 (Oracle) 개인정보처리방침</h1>
+<p class="meta">최종 업데이트: 2026-04-20 · 운영자: ClickAround (bjh0309@gmail.com)</p>
+
+<p>오라클(이하 "서비스")은 사용자의 개인정보를 최소한으로만 수집·이용합니다. 본 방침은 수집 항목, 이용 목적, 보관 기간, 제3자 제공, 이용자 권리를 설명합니다.</p>
+
+<h2>1. 수집하는 정보</h2>
+<ul>
+  <li><strong>익명 사용자 ID</strong> — Supabase 익명 인증으로 자동 생성된 UUID. 이름·이메일·전화번호 등 개인 식별 정보는 수집하지 않습니다.</li>
+  <li><strong>서비스 이용 기록</strong> — 타로 리딩 내용(질문, 선택 카드, AI 해석 텍스트), 일일 사용 횟수. 사용자 계정과 연결되어 저장됩니다.</li>
+  <li><strong>오류 로그</strong> — 앱이 비정상 종료되거나 오류가 발생할 때 메시지, 스택 트레이스, 앱 버전, 플랫폼 정보. 분당 30건 서버 측 제한.</li>
+  <li><strong>음성 입력 (선택)</strong> — 사용자가 마이크 아이콘을 눌러 질문을 말할 때 기기의 시스템 STT(음성인식) 서비스로 전달됩니다. 음성 원본 오디오는 서비스 서버에 <strong>저장되지 않습니다</strong>. 텍스트 변환 결과만 AI 응답 생성에 사용됩니다.</li>
+  <li><strong>음성 출력용 텍스트 (TTS)</strong> — AI 응답 텍스트가 Fish Audio API로 전송되어 음성 파일로 변환된 뒤 반환됩니다.</li>
+</ul>
+
+<h2>2. 이용 목적</h2>
+<ul>
+  <li>타로 리딩 기능 제공 (AI 해석 생성)</li>
+  <li>일일 무료 사용 한도 관리</li>
+  <li>앱 품질 개선 및 오류 수정</li>
+</ul>
+
+<h2>3. 보관 기간 및 파기</h2>
+<ul>
+  <li>리딩 내역 및 사용량: 사용자 삭제 요청 시까지</li>
+  <li>오류 로그: 90일 후 자동 삭제</li>
+  <li>익명 Supabase 계정: 비활성 180일 후 자동 만료 가능</li>
+</ul>
+
+<h2>4. 제3자 제공 (외부 서비스 처리)</h2>
+<p>다음 외부 서비스를 통해 데이터가 처리됩니다. 각 업체의 개인정보처리방침을 함께 참조하세요.</p>
+<ul>
+  <li><strong>Supabase</strong> (백엔드·데이터베이스·인증) — <a href="https://supabase.com/privacy" target="_blank" rel="noopener">supabase.com/privacy</a></li>
+  <li><strong>Alibaba Cloud DashScope (Qwen)</strong> (AI 응답 생성) — 질문과 뽑힌 카드만 전송. 사용자 ID는 전송하지 않음.</li>
+  <li><strong>Fish Audio</strong> (음성 합성) — AI 응답 텍스트만 전송.</li>
+  <li><strong>Google Play 결제 (RevenueCat)</strong> (프리미엄 구독 관리) — 해당 기능 활성화 시에만.</li>
+</ul>
+<p>외부 서비스에 원시 음성 오디오, 이메일, 이름, 전화번호 등 개인 식별 정보는 전송되지 않습니다.</p>
+
+<h2>5. 권한 사용 (Android)</h2>
+<ul>
+  <li><code>INTERNET</code>: AI·TTS·DB 통신</li>
+  <li><code>RECORD_AUDIO</code>: 음성 질문 입력 (시스템 STT 호출 시에만 활성화, 음성은 저장하지 않음)</li>
+  <li><code>WRITE_EXTERNAL_STORAGE</code> / <code>READ_EXTERNAL_STORAGE</code>: TTS 재생용 임시 오디오 파일 저장</li>
+</ul>
+
+<h2>6. 이용자 권리</h2>
+<p>이용자는 언제든 데이터 열람·수정·삭제를 요청할 수 있습니다. 요청은 아래 이메일로 보내주세요. 7영업일 이내에 처리됩니다.</p>
+
+<h2>7. 아동 개인정보 보호</h2>
+<p>본 서비스는 만 13세 미만 아동을 대상으로 하지 않으며, 의도적으로 아동의 개인정보를 수집하지 않습니다.</p>
+
+<h2>8. 보안</h2>
+<p>모든 통신은 HTTPS/TLS로 암호화됩니다. Supabase Row Level Security를 통해 사용자는 본인 데이터만 접근할 수 있습니다. 오류 로그 RPC는 SECURITY DEFINER + 서버측 rate limit (분당 30건)으로 보호됩니다.</p>
+
+<h2>9. 개정 이력</h2>
+<ul>
+  <li>2026-04-20 — 최초 작성 (Google Play 내부 테스트 출시 시점)</li>
+</ul>
+
+<h2>10. 문의</h2>
+<p>개발자: ClickAround (bjh0309@gmail.com)</p>
+<p>앱 패키지: <code>com.clickaround.oracle</code></p>
+</body>
+</html>
