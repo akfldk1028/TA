@@ -25,7 +25,7 @@ ul { padding-left: 20px; }
   <li><strong>서비스 이용 기록</strong> — 타로 리딩 내용(질문, 선택 카드, AI 해석 텍스트), 일일 사용 횟수. 사용자 계정과 연결되어 저장됩니다.</li>
   <li><strong>오류 로그</strong> — 앱이 비정상 종료되거나 오류가 발생할 때 메시지, 스택 트레이스, 앱 버전, 플랫폼 정보. 분당 30건 서버 측 제한.</li>
   <li><strong>음성 입력 (선택)</strong> — 사용자가 마이크 아이콘을 눌러 질문을 말할 때 기기의 시스템 STT(음성인식) 서비스로 전달됩니다. 음성 원본 오디오는 서비스 서버에 <strong>저장되지 않습니다</strong>. 텍스트 변환 결과만 AI 응답 생성에 사용됩니다.</li>
-  <li><strong>음성 출력용 텍스트 (TTS)</strong> — AI 응답 텍스트가 Fish Audio API로 전송되어 음성 파일로 변환된 뒤 반환됩니다.</li>
+  <li><strong>음성 출력용 텍스트 (TTS)</strong> — AI 응답 텍스트가 Microsoft Azure Neural TTS API로 전송되어 음성 파일로 변환된 뒤 반환됩니다. 음성 파일과 입력 텍스트는 Azure 측에서 저장되지 않습니다.</li>
 </ul>
 
 <h2>2. 이용 목적</h2>
@@ -47,7 +47,7 @@ ul { padding-left: 20px; }
 <ul>
   <li><strong>Supabase</strong> (백엔드·데이터베이스·인증) — <a href="https://supabase.com/privacy" target="_blank" rel="noopener">supabase.com/privacy</a></li>
   <li><strong>Alibaba Cloud DashScope (Qwen)</strong> (AI 응답 생성) — 질문과 뽑힌 카드만 전송. 사용자 ID는 전송하지 않음.</li>
-  <li><strong>Fish Audio</strong> (음성 합성) — AI 응답 텍스트만 전송.</li>
+  <li><strong>Microsoft Azure</strong> (Cognitive Services - Neural TTS, 음성 합성) — AI 응답 텍스트만 전송. Azure 측 데이터 보존 정책: <a href="https://learn.microsoft.com/azure/ai-services/speech-service/speech-services-data-storage" target="_blank" rel="noopener">learn.microsoft.com</a></li>
   <li><strong>Google Play 결제 (RevenueCat)</strong> (프리미엄 구독 관리) — 해당 기능 활성화 시에만.</li>
 </ul>
 <p>외부 서비스에 원시 음성 오디오, 이메일, 이름, 전화번호 등 개인 식별 정보는 전송되지 않습니다.</p>
